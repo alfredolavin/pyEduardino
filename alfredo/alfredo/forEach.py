@@ -8,10 +8,7 @@ class forEach(list):
     
   def __getattr__(self, key):
     return forEach(self, fname = key)
-  
-  def column(self):
-    return forEach((getattr(i, name) for i in self))
-  
+    
   def __call__(self, *args, **kwargs):
     if not self.fname:
       raise TypeError()
