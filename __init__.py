@@ -1,5 +1,4 @@
-import operator
-from alfredo import blackMagic
+from alfredo import blackMagic, forEach
 from collections import OrderedDict
 
 class dotDict(dict):
@@ -12,35 +11,25 @@ class OrderedDotDict(OrderedDict):
   __setattr__ = OrderedDict.__setitem__
   __delattr__ = OrderedDict.__delitem__
 
-class forEach(list):
-  def __init__(self, args, **kwargs):
-    super().__init__(args)
-    self.function = kwargs.get('function')
-    
-  def __getattr__(self, key):
-    return forEach(self, function = key)
-  
-  def column(self):
-    return forEach((getattr(i, name) for i in self))
-  
-  def __call__(self, *args, **kwargs):
-    if getattr(operator, self.function, None):
-      func = getattr(operator, self.function)
-      return forEach(( func(*((item,) + args), **kwargs) for item in self ))
-    else:
-      return forEach(getattr(item, self.function)(*args, **kwargs) for item in self)
-
-def addforEachMethodToLists(propertyName='forEach'):
-  blackMagic.proxy_builtin(list)[propertyName] = property(forEach)
-
-def addforEachMethodToTuples(propertyName='forEach'):
-  blackMagic.proxy_builtin(tuple)[propertyName] = property(forEach)
-
 def column(self, name):
   return [getattr(i, name) for i in self]
+
+def addforEachMethodToLists(propertyName='forEach'):
+  blackMagic.proxy_builtin(list)[propertyName] = property(forEach.forEach)
+
+def addforEachMethodToTuples(propertyName='forEach'):
+  blackMagic.proxy_builtin(tuple)[propertyName] = property(forEach.forEach)
 
 def addColumnPropertyToLists():
   blackMagic.proxy_builtin( list )['column'] = column
 
 if __name__ == '__main__':
+  
+  def cmd(*args):
+    return ';'.join(args.forEach.str())
+  
+  addforEachMethodToTuples()
+  print(cmd(2,3,4,5))
+  
   pass
+
