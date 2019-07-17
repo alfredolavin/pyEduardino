@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;alfredo/__black__magic.py&apos; to &apos;blackMagic.py&apos;" description="Rename resource &apos;__black__magic.py&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="__black__magic.py" name="blackMagic.py" stamp="1512086822459" updateReferences="true"/>
-</session>
