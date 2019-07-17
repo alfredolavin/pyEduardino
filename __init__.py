@@ -124,8 +124,15 @@ def upgradeBuilInListClass():
   proxy_builtin( list )['where'] = where
   proxy_builtin( list )['exclude'] = exclude
   proxy_builtin(str)['re'] = property(_re)
+  proxy_builtin(range)['forEach'] = property(forEach)
+
 
 def main():
+  # Run some tests
+  upgradeBuilInListClass()
+  test = list(range(10)) + ['a','b']
+  print(test.forEach.str().upper())
+  print(range(66,88).forEach.chr().lower())
   pass
 
 if __name__ == '__main__':
