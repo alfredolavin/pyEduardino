@@ -6,6 +6,9 @@ import builtins
 import ctypes
 import re
 
+global _last,_first
+_last,_first = 0, -1
+
 class PyObject(ctypes.Structure):
   pass
 
@@ -94,6 +97,15 @@ def evens(self):
 def odds(self):
   return self[::2]
 
+def last(self):
+  return self[-1]
+
+def first(self):
+  return self[0]
+
+def _reversed(self):
+  return reversed(self)
+
 def _len(self):
   return len(self)
 
@@ -114,22 +126,51 @@ def where(self, what):
   else:
     raise TypeError()
 
-def upgradeBuilInListClass():
-  proxy_builtin(tuple)['forEach'] = property(forEach)
-  proxy_builtin(list)['forEach'] = property(forEach)
-  proxy_builtin( list )['column'] = column
-  proxy_builtin( list )['evens'] = evens
-  proxy_builtin( list )['odds'] = odds
+def eduardinze():
+  proxy_builtin( range )['forEach'] = property(forEach)
+  proxy_builtin( str )['re'] = property(_re)
+  # Extend lists
+  proxy_builtin( list )['forEach'] = property(forEach)
   proxy_builtin( list )['len'] = property(_len)
-  proxy_builtin( list )['where'] = where
   proxy_builtin( list )['exclude'] = exclude
-  proxy_builtin(str)['re'] = property(_re)
-  proxy_builtin(range)['forEach'] = property(forEach)
+  proxy_builtin( list )['column'] = column
+  proxy_builtin( list )['evens'] = property(evens)
+  proxy_builtin( list )['where'] = property(where)
+  proxy_builtin( list )['odds'] = property(odds)
+  proxy_builtin( list )['last'] = property(last)
+  proxy_builtin( list )['first'] = property(first)
+  proxy_builtin( list )['reversed'] = property(_reversed)
+  # Extend ranges too
+  proxy_builtin( range )['forEach'] = property(forEach)
+  proxy_builtin( range )['len'] = property(_len)
+  proxy_builtin( range )['exclude'] = exclude
+  proxy_builtin( range )['column'] = column
+  proxy_builtin( range )['evens'] = evens
+  proxy_builtin( range )['where'] = where
+  proxy_builtin( range )['odds'] = odds
+  proxy_builtin( range )['last'] = last
+  proxy_builtin( range )['first'] = first
+  proxy_builtin( range )['reversed'] = _reversed
 
+  # Extend ranges too
+  proxy_builtin( range )['forEach'] = property(forEach)
+  proxy_builtin( range )['len'] = property(_len)
+  proxy_builtin( range )['exclude'] = exclude
+  proxy_builtin( range )['column'] = column
+  proxy_builtin( range )['evens'] = evens
+  proxy_builtin( range )['where'] = where
+  proxy_builtin( range )['odds'] = odds
+  proxy_builtin( range )['last'] = last
+  proxy_builtin( range )['first'] = first
+  proxy_builtin( range )['reversed'] = _reversed
+
+eduardinze()
 
 def main():
-  # Run some tests
-  upgradeBuilInListClass()
+  # Run some test and examples
+  sample = list(range(0,10,3)) + ['a','b']
+  print((list(range(0,10,3)) + ['a','b']).odds().str().upper())
+
   test = list(range(10)) + ['a','b']
   print(test.forEach.str().upper())
   print(range(66,88).forEach.chr().lower())
