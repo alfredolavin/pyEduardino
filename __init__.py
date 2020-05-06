@@ -50,24 +50,6 @@ class forEach(list):
       return forEach(( func(*((item,) + args), **kwargs) for item in self ))
     else:
       return forEach(getattr(item, self.fname)(*args, **kwargs) for item in self)
-#
-#class forEach(list):
-#  def __init__(self, args, **kwargs):
-#    super().__init__(args)
-#    self.fname = kwargs.get('fname')
-#
-#  def __getattr__(self, key):
-#    return forEach(self, fname = key)
-#
-#  def __call__(self, *args, **kwargs):
-#    if not self.fname:
-#      raise TypeError()
-#    func = getattr(operator, self.fname, None) or\
-#           getattr(builtins, self.fname, None)
-#    if func:
-#      return forEach(( func(*((item,) + args), **kwargs) for item in self ))
-#    else:
-#      return forEach(getattr(item, self.fname)(*args, **kwargs) for item in self)
 
 class _re(str):
   def __init__(self, _fname = None):
@@ -93,6 +75,11 @@ class dotDict(dict):
   __delattr__ = dict.__delitem__
 
 class OrderedDotDict(OrderedDict):
+  __getattr__ = OrderedDict.__getitem__
+  __setattr__ = OrderedDict.__setitem__
+  __delattr__ = OrderedDict.__delitem__
+
+class dotSet(set):
   __getattr__ = OrderedDict.__getitem__
   __setattr__ = OrderedDict.__setitem__
   __delattr__ = OrderedDict.__delitem__
@@ -163,7 +150,7 @@ def _map(self, func):
     tmp[i]= eval(func)
   return tmp
 
-def enumerateme(self, func):
+def enumerateme(self):
   return forEach(enumerate(self))
 
 def where(self, what):
